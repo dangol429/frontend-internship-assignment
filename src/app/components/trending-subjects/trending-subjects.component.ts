@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SubjectsService } from '../../core/services/subjects.service';
 import { Book } from 'src/app/core/models/book-response.model';
 
@@ -11,23 +11,14 @@ import { Book } from 'src/app/core/models/book-response.model';
 export class TrendingSubjectsComponent implements OnInit {
 
   isLoading: boolean = true;
-
   subjectName: string = '';
-
   allBooks: Book[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private subjectsService: SubjectsService
+    private subjectsService: SubjectsService,
+    private router: Router
   ) {}
-
-  getAllBooks() {
-    this.subjectsService.getAllBooks(this.subjectName).subscribe((data) => {
-      this.allBooks = data?.works;
-      // this.subjectsArray = data;
-      this.isLoading = false;
-    });
-  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -37,4 +28,14 @@ export class TrendingSubjectsComponent implements OnInit {
     });
   }
 
+  getAllBooks() {
+    this.subjectsService.getAllBooks(this.subjectName).subscribe((data) => {
+      this.allBooks = data?.works;
+      this.isLoading = false;
+    });
+  }
+  
+  goToHomePage(): void {
+    this.router.navigate(['/']);
+  }
 }

@@ -1,6 +1,35 @@
-<div *ngIf="allBooks.length > 0">
+<div *ngIf="subjectName">
+  <h2>{{ subjectName }}</h2>
+  <div class="loading" *ngIf="isLoading">Loading...</div>
   <front-end-internship-assignment-table-view
-  [booksList]="allBooks"
-  [subjectName]="subjectName"
+    [booksList]="allBooks"
+    [subjectName]="subjectName"
   ></front-end-internship-assignment-table-view>
+  <button class="back-button" (click)="goToHomePage()">Back</button>
 </div>
+<style>
+  h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.loading {
+  font-size: 18px;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.back-button {
+  background-color: black;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.back-button:hover {
+  background-color: #555;
+}
+</style>
