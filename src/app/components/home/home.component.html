@@ -1,23 +1,110 @@
-<div class="header">
-  <div class="tw-text-24-px tw-font-600">Open Books Library</div>
-  <div class="search-button">
-    <mat-icon class="tw-mt-16-px" aria-label="Search Icon">search</mat-icon>
-    <input
-      [formControl]="bookSearch"
-      name="searchKey"
-      type="text"
-      placeholder="Search Books"
-      class="tw-border-0 tw-bg-inherit"
-    >
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Books Library</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f8f9fa;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+    }
+
+    .pagination {
+      text-align: left;
+      margin-left: 10px;
+    }
+
+    .show-entries {
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    .entries-info {
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .logo {
+      margin: 0px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="sidebar">
+      <div class="header">
+        WELCOME
+      </div>
+      <button class="sidebar-item">Home</button>
+      <button class="sidebar-item">Search</button>
+      <div class="trending-subjects">
+        <ul>
+          <li *ngFor="let subject of trendingSubjects" [routerLink]="'/trending-subject/' + subject.name">
+            {{ subject.name }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+      <div class="top-bar">
+        <div class="logo">HOME</div>
+        <div class="search-bar text-center">
+          <input [(ngModel)]="searchKey" (keyup.enter)="searchBooks(searchKey)" name="searchKey" type="text"
+            placeholder="Search..">
+          <button class="btn btn-secondary" (click)="clearSearch()">Clear</button>
+        </div>
+      </div>
+      <table *ngIf="showAllEntries || searchResults.length > 0" class="table search-results">
+        <thead>
+          <tr>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Publish Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let book of searchResults">
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.publishDate }}</td>
+          </tr>
+        </tbody>
+      </table>
+        <div class="loader" *ngIf="loading">Loading...</div>
+        <div *ngIf="noResultsFound" class="no-results">No results found.</div>
+
+        <div class="footer">
+          <div class="pagination">
+            <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+            <span>{{ currentPage }}</span>
+            <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+          </div>
+  
+          <div class="entries-info">
+            Showing {{ getStartIndex() }} to {{ getEndIndex() }} of {{ getTotalEntries() }} entries
+          </div>
+  
+          <div class="scroll-icon">
+            Show entries:
+            <select [(ngModel)]="limit" (ngModelChange)="changeLimit()">
+              <option *ngFor="let number of scrollNumbers" [value]="number">{{ number }}</option>
+            </select>
+          </div>
+          
+        </div>
+    </div>
   </div>
-</div>
-<div class="tw-flex tw-flex-row tw-m-24-px">
-  <section class="trending-subjects">
-    <div class="tw-font-600 tw-text-24-px">Trending Subjects</div>
-    <ul class="tw-list-none tw-pl-0">
-      <li class="tw-text-16-px tw-cursor-pointer tw-p-12-px" *ngFor="let subject of trendingSubjects" routerLink="/trending-subject/{{ subject.name }}">
-        {{ subject.name }}
-      </li>
-    </ul>
-  </section>
-</div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
